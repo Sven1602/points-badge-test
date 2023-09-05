@@ -1,8 +1,9 @@
 import { User } from './types/user.interface';
 import { Icon } from './types/icon.enum';
 
-export const getUsersBadge = ( user: User ): Icon | null => {
-  let badge = null;
+export async function getUsersBadge(user: User): Promise<Icon | null> {
+  
+  let badge: Icon | null = null;
   switch ( true ) {
     case ( user.solution_count >= 5 && user.solution_count < 25 ):
       badge = Icon.BADGE_BRONZE;
@@ -15,4 +16,4 @@ export const getUsersBadge = ( user: User ): Icon | null => {
       break;
   }
   return badge;
-};
+}
