@@ -1,10 +1,11 @@
 import { User } from './types/user.interface';
 import { Icon } from './types/icon.enum';
-import { BadgeList } from './badge_list.class';
+import { getAllUser } from './user-store';
+import { UserBadge } from './types/user-badge';
+import { UserStatistic } from './types/user-statistic.class';
 
-/*
 export const getUsersBadge = ( user: User ): Icon | null => {
-  let badge = null;
+  let badge: Icon | null = null;
   switch ( true ) {
     case ( user.solution_count >= 5 && user.solution_count < 25 ):
       badge = Icon.BADGE_BRONZE;
@@ -18,33 +19,19 @@ export const getUsersBadge = ( user: User ): Icon | null => {
   }
   return badge;
 };
-*/
 
-// Version 1 with if/else Statements
-export const getUsersBadgeVers1 = ( user: User ): Icon | null => {
-  let badge: Icon | null = null;
-
-  if(user.solution_count >= 5 && user.solution_count < 25){
-    badge = Icon.BADGE_BRONZE;
-  }else if(user.solution_count >= 25 && user.solution_count < 50){
-    badge = Icon.BADGE_SILVER;
-  }else if(user.solution_count >= 50){
-    badge = Icon.BADGE_GOLD;
-  }
-  return badge;
+export const getUsersWithStatistics = (): void => {
+  let userBadges = new Array<UserBadge>();
+  getAllUser().then(users => {
+    users.forEach(user => {
+      let badge = getUsersBadge(user);
+      let userBadge = new UserBadge(user, badge);
+      userBadges.push(userBadge);
+    });
+    let userStatistic = new UserStatistic();
+    userStatistic.calculateStatistic(userBadges);
+    userStatistic.displayStatistic();
+  });
 };
 
-// Version 2 as Chain of Responsibility
-export const getUsersBadgeVers2 = ( user: User ): Icon | null => {
-  let badge: Icon | null = null;
 
-  let badgeList = new BadgeList();
-  badgeList.badges.forEach((item)=>
-    {
-      if(item.check(user)){
-        badge = item.badge;
-      }
-    }
-  )
-  return badge;
-};
