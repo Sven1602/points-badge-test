@@ -55,7 +55,11 @@ export class UserStatistic{
         this.count = userBadges.length;
         let counts = userBadges.map(x => x.user.solution_count);
         //console.log(this.counts);
-        this.top_5_user = userBadges.slice(0,5).map(x => x.user);
+        this.top_5_user = userBadges.map(x => x.user);
+        // sort desc
+        this.top_5_user = this.top_5_user.sort((a,b) => 0 - (a.solution_count > b.solution_count ? 1 : -1));
+        // get top 5 with highest solution_count
+        this.top_5_user = this.top_5_user.slice(0, 5);
         console.log(this.top_5_user.length);
         //console.log(this.top_5_users);
         this.average_user_count = this.calculateAverage(counts);
